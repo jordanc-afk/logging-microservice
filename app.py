@@ -23,19 +23,19 @@ activity_log = [
 ]
 
 
-@app.route('/api/activity_log', methods=['GET'])
+@app.route('/api/activity_log/', methods=['GET'])
 def get_activity():
     return jsonify({'activity_log': activity_log})
 
 
-@app.route('/api/activity_log/<int:activity_id>', methods=['GET'])
+@app.route('/api/activity_log/<int:activity_id>/', methods=['GET'])
 def get_specific_activity(activity_id):
     # activity = [lambda x: x['id'] == activity_id, activity_log]
     for item in filter(lambda x: x['id'] == activity_id, activity_log):
         return jsonify({'activity_log': item})
 
 
-@app.route('/api/activity_log', methods=['POST'])
+@app.route('/api/activity_log/', methods=['POST'])
 def post_activity():
     new_activity = {
         'id': activity_log[-1]['id'] + 1,

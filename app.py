@@ -1,51 +1,41 @@
 #hey there..
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from datetime import datetime
-import json
+from models import ActivityLog
+
 
 app = Flask(__name__)
 
-activity_log = [
-    {
-        'id': 0,
-        'user_id': 1,
-        'username': 'john',
-        'timestamp': datetime.utcnow(),
-        'details': 'important stuff here',
-    },
-    {
-        'id': 1,
-        'user_id': 2,
-        'username': 'yoko',
-        'timestamp': datetime.utcnow(),
-        'details': 'important stuff here',
-    },
-]
+
+class User:
+    def __init__(self, user_id, username):
+        self.user_id = user_id
+        self.username = username
 
 
-@app.route('/api/activity_log/', methods=['GET'])
+user1 = User(1, "jordan")
+user2 = User(2, "jordan2")
+
+
+nice = "nice"
+
+
+details = 'this is just a test'
+
+
+@app.route('/api/ActivityLog/', methods=['GET'])
 def get_activity():
-    return jsonify({'activity_log': activity_log})
+    return ActivityLog.get_all_activities()
 
 
-@app.route('/api/activity_log/<int:activity_id>/', methods=['GET'])
-def get_specific_activity(activity_id):
-    # activity = [lambda x: x['id'] == activity_id, activity_log]
-    for item in filter(lambda x: x['id'] == activity_id, activity_log):
-        return jsonify({'activity_log': item})
+@app.route('/api/ActivityLog/<int:specific_id>/', methods=['GET'])
+def get_specific_user_activity(specific_id):
+    return ActivityLog.get_specific_user_event(specific_id)
 
 
-@app.route('/api/activity_log/', methods=['POST'])
+@app.route('/api/ActivityLog/1/', methods=['POST'])
 def post_activity():
-    new_activity = {
-        'id': activity_log[-1]['id'] + 1,
-        'user_id': activity_log[-1]['user_id'] + 1,
-        'username': request.json['username'],
-        'timestamp': datetime.utcnow(),
-        'details': request.json['details']
-    }
-    activity_log.append(new_activity)
-    return jsonify({'activity_log': new_activity})
+    return ActivityLog.post_log_event(user2, details)
 
 
 if __name__ == '__main__':

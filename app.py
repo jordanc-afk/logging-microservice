@@ -13,14 +13,11 @@ class User:
         self.username = username
 
 
-user1 = User(1, "jordan")
-user2 = User(2, "jordan2")
+user1 = (1,'jordan')
+user2 = (2, 'jordan2')
 
 
-nice = "nice"
-
-
-details = 'this is just a test'
+details = 'this is a test'
 
 
 @app.route('/api/ActivityLog/', methods=['GET'])

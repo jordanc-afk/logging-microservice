@@ -23,7 +23,7 @@ class ActivityLog(Document):
         return dumps(activity_log)
 
     @classmethod
-    def post_log_event(cls, user_id, username, timestamp, details):
+    def post_log_event(cls, user_id, username, details, timestamp):
         activity_log=[]
         event = ActivityLog(
             user_id=user_id,

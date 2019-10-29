@@ -19,7 +19,7 @@ def get_specific_user_activity(specific_id):
 
 @app.route('/api/activities/', methods=['POST'])
 def post_activity():
-    return ActivityLog.post_log_event(request.json['user_id'], request.json['username'], request.json['details'])
+    return ActivityLog.post_log_event(request.json['user_id'], request.json['username'], request.json['details'], request.json['timestamp'])
 
 
 if __name__ == '__main__':

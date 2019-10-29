@@ -23,13 +23,13 @@ class ActivityLog(Document):
         return dumps(activity_log)
 
     @classmethod
-    def post_log_event(cls, user_id, username, details):
+    def post_log_event(cls, user_id, username, timestamp, details):
         activity_log=[]
         event = ActivityLog(
             user_id=user_id,
             username=username,
             details=details,
-            timestamp=datetime.utcnow()
+            timestamp=timestamp,
             )
         event.save()
         for activity in MongoClient().activity_log_db.activity_log.find({'timestamp': event.timestamp}):

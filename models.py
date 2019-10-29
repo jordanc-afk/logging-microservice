@@ -1,6 +1,7 @@
 from mongoengine import connect, StringField, IntField, Document, DateTimeField
 from datetime import datetime
 from pymongo import MongoClient
+import os
 from bson.json_util import dumps
 
 
@@ -14,10 +15,11 @@ class ActivityLog(Document):
     details = StringField(required=True)
 
     @classmethod
-    def get_all_activities(cls):
+    def get_activities(cls):
         activity_log=[]
         for activity in MongoClient().activity_log_db.activity_log.find():
-            activity_log.append(activity)
+            while len(activity_log) < os.getenv('AMOUNT_OF_ACTIVITIES_TO_RETURN', 10):
+                activity_log.append(activity)
         return dumps(activity_log)
 
     @classmethod

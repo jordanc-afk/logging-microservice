@@ -7,22 +7,9 @@ from models import ActivityLog
 app = Flask(__name__)
 
 
-class User:
-    def __init__(self, user_id, username):
-        self.user_id = user_id
-        self.username = username
-
-
-user1 = (1,'jordan')
-user2 = (2, 'jordan2')
-
-
-details = 'this is a test'
-
-
 @app.route('/api/activities/', methods=['GET'])
 def get_activity():
-    return ActivityLog.get_all_activities()
+    return ActivityLog.get_activities()
 
 
 @app.route('/api/activities/<specific_id>/', methods=['GET'])

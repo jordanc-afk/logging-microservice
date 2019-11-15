@@ -1,12 +1,10 @@
 from mongoengine import connect, StringField, IntField, Document, DateTimeField
 from datetime import datetime
-from pymongo import MongoClient
-import os
-import json
 from bson.json_util import dumps
 
+DB_URI = "mongodb+srv://activity-logger-dbUser:g%3FfmgBMrGCRVivNysXD9hsqJ@cluster0-khbtl.mongodb.net/activity_log_database?retryWrites=true&w=majority"
 
-connect(db="activity_log_db", host="localhost")
+db = connect(db="activity_log_db", host=DB_URI, port=27017)
 
 
 class ActivityLog(Document):
@@ -17,26 +15,27 @@ class ActivityLog(Document):
 
     @classmethod
     def get_activities(cls):
+        activity_log = []
+        x = 0
         activities = ActivityLog.objects.all().order_by("-timestamp").limit(10)
-        return dumps(activities)
+        for activity in activities:
+            activity_log.append(activities.__getitem__(x))
+            x += 1
+        return dumps(activity_log)
 
     @classmethod
     def post_log_event(cls, user_id, username, details, timestamp):
-        activity_log=[]
         event = ActivityLog(
             user_id=user_id,
             username=username,
             details=details,
-            timestamp=timestamp,
-            )
+            timestamp=timestamp
+        )
         event.save()
-        for activity in MongoClient().activity_log_db.activity_log.find({'timestamp': event.timestamp}):
-            activity_log.append(activity)
-        return dumps(activity_log)
+        recently_added = ActivityLog.objects(timestamp=event.timestamp).get()
+        return dumps(recently_added)
 
     @classmethod
-    def get_specific_user_event(cls, specific_user):
-        activity_log=[]
-        for activity in MongoClient().activity_log_db.activity_log.find({'user_id': specific_user}):
-            activity_log.append(activity)
-        return dumps(activity_log)
+    def get_specific_event(cls, specific_id):
+        specific_activity = ActivityLog.objects(id=specific_id).get()
+        return dumps(specific_activity)

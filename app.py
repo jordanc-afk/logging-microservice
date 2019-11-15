@@ -1,6 +1,4 @@
-#hey there..
-from flask import Flask, jsonify, request
-from datetime import datetime
+from flask import Flask, request, jsonify
 from models import ActivityLog
 
 
@@ -9,12 +7,12 @@ app = Flask(__name__)
 
 @app.route('/api/activities/', methods=['GET'])
 def get_activity():
-    return ActivityLog.get_activities()
+    return jsonify(ActivityLog.get_activities())
 
 
 @app.route('/api/activities/<specific_id>/', methods=['GET'])
-def get_specific_user_activity(specific_id):
-    return ActivityLog.get_specific_user_event(int(specific_id))
+def get_specific_activity(specific_id):
+    return ActivityLog.get_specific_event(int(specific_id))
 
 
 @app.route('/api/activities/', methods=['POST'])

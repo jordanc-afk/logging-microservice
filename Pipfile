@@ -9,14 +9,10 @@ flake8 = "*"
 [packages]
 flask = "*"
 mongoengine = "*"
-pymongo = "*"
-requests = "*"
-pytest = "*"
-coverage = "*"
 dnspython = "*"
-heroku = "*"
+heroku3 = "*"
+pymongo = "*"
 gunicorn = "*"
-python-dateutil = "*"
 
 [requires]
 python_version = "3.7"

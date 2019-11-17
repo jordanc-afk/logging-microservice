@@ -1,10 +1,9 @@
 from mongoengine import connect, StringField, IntField, Document, DateTimeField
 from datetime import datetime
-from bson.json_util import dumps
+import os
 
-DB_URI = "mongodb+srv://activity-logger-dbUser:g%3FfmgBMrGCRVivNysXD9hsqJ@cluster0-khbtl.mongodb.net/activity_log_database?retryWrites=true&w=majority"
 
-db = connect(db="activity_log_db", host=DB_URI, port=27017)
+db = connect(db=os.environ['DB'], host=os.environ['DB_CONNECTION'], port=os.environ['DB_PORT'])
 
 
 class ActivityLog(Document):
@@ -15,13 +14,8 @@ class ActivityLog(Document):
 
     @classmethod
     def get_activities(cls):
-        activity_log = []
-        x = 0
-        activities = ActivityLog.objects.all().order_by("-timestamp").limit(10)
-        for activity in activities:
-            activity_log.append(activities.__getitem__(x))
-            x += 1
-        return dumps(activity_log)
+        activities = ActivityLog.objects.all().order_by("-timestamp").limit(os.environ['ACTIVITIES_GET'])
+        return activities.to_json()
 
     @classmethod
     def post_log_event(cls, user_id, username, details, timestamp):
@@ -33,9 +27,9 @@ class ActivityLog(Document):
         )
         event.save()
         recently_added = ActivityLog.objects(timestamp=event.timestamp).get()
-        return dumps(recently_added)
+        return recently_added.to_json()
 
     @classmethod
     def get_specific_event(cls, specific_id):
         specific_activity = ActivityLog.objects(id=specific_id).get()
-        return dumps(specific_activity)
+        return specific_activity.to_json()

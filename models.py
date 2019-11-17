@@ -3,8 +3,7 @@ from datetime import datetime
 import os
 
 
-DB_URI = 'mongodb+srv://activity-logger-dbUser:g%3FfmgBMrGCRVivNysXD9hsqJ@cluster0-khbtl.mongodb.net/activity_log_database?retryWrites=true&w=majority'
-db = connect(db="activity_log_db", host=DB_URI, port=27017)
+db = connect(db=os.environ['DB'], host=os.environ['DB_CONNECTION'], port=int(os.environ['DB_PORT']))
 
 
 class ActivityLog(Document):

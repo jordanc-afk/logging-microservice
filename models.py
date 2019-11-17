@@ -1,4 +1,4 @@
-from mongoengine import connect, StringField, IntField, Document, DateTimeField
+from mongoengine import connect, IntField, StringField, DateTimeField, Document
 from datetime import datetime
 import os
 
@@ -14,7 +14,7 @@ class ActivityLog(Document):
 
     @classmethod
     def get_activities(cls):
-        activities = ActivityLog.objects.all().order_by("-timestamp").limit(os.environ['ACTIVITIES_GET'])
+        activities = ActivityLog.objects.all().order_by("-timestamp").limit(10)
         return activities.to_json()
 
     @classmethod

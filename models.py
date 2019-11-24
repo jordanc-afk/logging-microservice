@@ -1,6 +1,10 @@
 from mongoengine import connect, IntField, StringField, DateTimeField, Document
 from datetime import datetime
 import os
+import time
+
+
+sleep_time = os.getenv('SLEEP_TIME', default=0)
 
 
 db = connect(db=os.environ['DB'], host=os.environ['DB_CONNECTION'], port=int(os.environ['DB_PORT']))
@@ -26,6 +30,7 @@ class ActivityLog(Document):
             timestamp=timestamp
         )
         event.save()
+        time.sleep(int(sleep_time))
         recently_added = ActivityLog.objects(timestamp=event.timestamp).get()
         return recently_added.to_json()
 

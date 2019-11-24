@@ -1,4 +1,5 @@
 #!/bin/bash
+export SLEEP_TIME=5
 export FLASK_DEBUG=1
 export ACTIVITIES_GET=10
 export DB=activity_log_db
